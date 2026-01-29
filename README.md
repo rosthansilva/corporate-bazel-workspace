@@ -87,45 +87,42 @@ bazel --bazelrc=ci.bazelrc run //:server
 
 ### C. The Promotion Workflow (Playground -> Prod)
 
-```bash
-Developer
-   |
-   |  git commit
-   v
-CI Pipeline
-   |
-   |  generate tarball
-   v
-JFrog (Artifacts)
-   |
-   |  register metadata
-   v
-BCR Playground (source.json)
-   |
-   |  consume version
-   v
-CI Tests (build backend-app)
-   |
-   v
-Tests passed?
-   |-------------------|
-   |                   |
-   | No                | Yes
-   v                   v
-Fix issues         Promotion
-   |                   |
-   |                   |-----------------------------|
-   |                   |                             |
-   v                   v                             v
-Developer     Option A (Manual)              Option B (Automatic)
-                  |                               |
-                  | Open PR                       | CI git push
-                  | Copy JSON                     |
-                  v                               v
-           Human approval                   BCR Production
-                  |
-                  v
-           BCR Production
+```mermaid
+graph TD
+    %% Nodes
+    Dev["👷 Developer<br/>Commit code"]
+    CI["🚀 CI Pipeline"]
+    JFrog["☁️ JFrog<br/>(Tarball artifacts)"]
+    Playground["🧪 BCR Playground<br/>(source.json metadata)"]
+    Test["🧪 CI Tests<br/>Build backend-app"]
+    Decision{"Tests passed?"}
+
+    Promo{"Promotion"}
+    PR["Option A (Manual)<br/>Open PR copying JSON<br/>Playground → Prod"]
+    Auto["Option B (Automatic)<br/>CI pushes to Prod repo"]
+    Prod["🔒 BCR Production<br/>(Official)"]
+
+    %% Main flow
+    Dev -->|git commit| CI
+    CI -->|Generate tarball| JFrog
+    CI -->|Register metadata| Playground
+
+    %% Test flow
+    Playground -->|Consume version| Test
+    Test --> Decision
+
+    %% Decision
+    Decision -- No --> Fix[Fix issues]
+    Fix --> Dev
+
+    Decision -- Yes --> Promo
+
+    %% Promotion paths
+    Promo --> PR
+    Promo --> Auto
+
+    PR -->|Human approval| Prod
+    Auto -->|Automatic push| Prod
 
 ```
 
