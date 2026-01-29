@@ -18,7 +18,7 @@ Large organizations (e.g., Google, Uber, Nubank) typically configure Artifactory
 
 
 
-### 2. Our Adaptation for Bazel (Bzlmod)
+### 2. My Adaptation for Bazel (Bzlmod)
 
 Bazel enforces stricter requirements than Maven or Gradle. It relies on **SHA256 checksums** to guarantee integrity. If an artifact is overwritten (Standard Snapshot behavior) but the hash changes, Bazel will fail with a `Checksum Mismatch`.
 
