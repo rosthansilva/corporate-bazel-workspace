@@ -88,49 +88,26 @@ bazel --bazelrc=ci.bazelrc run //:server
 ### C. The Promotion Workflow (Playground -> Prod)
 
 ```mermaid
-flowchart TD
-    %% Atores e Início
-    Dev([👷 Desenvolvedor]) -->|git push| CI_Start(🚀 Início do CI Pipeline)
+graph TD
+    %% Nós (Nodes)
+    Dev["👷 Developer"]
+    CI["🚀 CI Pipeline"]
+    JFrog["☁️ JFrog (Binários)"]
+    Playground["🧪 BCR Playground (Metadados)"]
+    Consumer["⚙️ Backend App (Validação)"]
+    Decision{"✅ Aprovado?"}
+    Prod["🔒 BCR Production (Oficial)"]
 
-    %% Fase 1: Build e Publicação no Playground
-    subgraph Stage_CI [Fase 1: Build & Staging]
-        direction TB
-        CI_Start -->|1. Build & Pack| Tarball(📦 Artifact .tar.gz)
-        Tarball -->|2. Upload Binário| JFrog[("☁️ JFrog Artifactory\n(Armazenamento Imutável)")]
-        Tarball -->|3. Calc SHA256| Hash(🔑 SHA256 Hash)
-        Hash -->|4. Commit Metadata| BCR_Play[("🧪 BCR Playground\n(Registry de Staging)")]
-    end
-
-    %% Fase 2: Verificação
-    subgraph Stage_Test [Fase 2: Validação]
-        direction TB
-        BCR_Play -.->|Fetch Metadata| Consumer_CI["⚙️ Consumer App CI\n(backend-app)"]
-        JFrog -.->|Download Binary| Consumer_CI
-        Consumer_CI -->|Bazel Test| Check{✅ Testes Passaram?}
-    end
-
-    %% Fase 3: Promoção
-    subgraph Stage_Prod [Fase 3: Promoção para Produção]
-        direction TB
-        Check -- Não --> Fix[❌ Corrigir Bug]
-        Check -- Sim --> Promo{Escolha de Promoção}
-        
-        Promo -->|Opção A: Manual| PR["📝 Abrir Pull Request\n(Playground -> Prod)"]
-        PR -->|Code Review + Merge| BCR_Prod
-        
-        Promo -->|Opção B: Automática| Bot[🤖 CI Bot Push]
-        Bot -->|Git Push| BCR_Prod[("🔒 BCR Production\n(Registry Oficial)")]
-    end
-
-    %% Estilização
-    classDef storage fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef registry fill:#bbf,stroke:#333,stroke-width:2px;
-    classDef process fill:#fff,stroke:#333,stroke-width:1px;
-    classDef decision fill:#ff9,stroke:#333,stroke-width:2px;
-
-    class JFrog storage;
-    class BCR_Play,BCR_Prod registry;
-    class Check,Promo decision;
+    %% Fluxo
+    Dev -->|git push| CI
+    CI -->|1. Upload tar.gz| JFrog
+    CI -->|2. Cria source.json| Playground
+    
+    Playground -.->|3. Consome Versão| Consumer
+    Consumer -->|4. Roda Testes| Decision
+    
+    Decision -- Não --> Fix["❌ Corrigir Bug"]
+    Decision -- Sim -->|5. Promoção (Copy JSON)| Prod
 ---
 
 ## 4. Maintenance & Validations
