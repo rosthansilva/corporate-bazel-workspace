@@ -95,11 +95,11 @@ graph TD
     JFrog["☁️ JFrog<br/>(Tarball artifacts)"]
     Playground["🧪 BCR Playground<br/>(source.json metadata)"]
     Test["🧪 CI Tests<br/>Build backend-app"]
-    Decision{"✅ Tests passed?"}
+    Decision{"Tests passed?"}
 
-    Promo{"🚀 Promotion"}
-    PR["👤 Option A (Manual)<br/>Open PR copying JSON<br/>Playground → Prod"]
-    Auto["🤖 Option B (Automatic)<br/>CI pushes to Prod repo"]
+    Promo{"Promotion"}
+    PR["Option A (Manual)<br/>Open PR copying JSON<br/>Playground → Prod"]
+    Auto["Option B (Automatic)<br/>CI pushes to Prod repo"]
     Prod["🔒 BCR Production<br/>(Official)"]
 
     %% Main flow
@@ -112,7 +112,9 @@ graph TD
     Test --> Decision
 
     %% Decision
-    Decision -- No -->|"❌ Fix issues"| Dev
+    Decision -- No --> Fix[Fix issues]
+    Fix --> Dev
+
     Decision -- Yes --> Promo
 
     %% Promotion paths
@@ -121,7 +123,6 @@ graph TD
 
     PR -->|Human approval| Prod
     Auto -->|Automatic push| Prod
-
 
 ```
 
