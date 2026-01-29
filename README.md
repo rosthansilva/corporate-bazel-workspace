@@ -89,28 +89,38 @@ bazel --bazelrc=ci.bazelrc run //:server
 
 ```mermaid
 graph TD
-    %% Nós (Nodes)
-    Dev["👷 Developer"]
+    %% Nodes
+    Dev["👷 Developer<br/>Commit code"]
     CI["🚀 CI Pipeline"]
-    JFrog["☁️ JFrog (Binários)"]
-    Playground["🧪 BCR Playground (Metadados)"]
-    Consumer["⚙️ Backend App (Validação)"]
-    Decision{"✅ Aprovado?"}
-    Fix["❌ Corrigir Bug"]
-    Prod["🔒 BCR Production (Oficial)"]
+    JFrog["☁️ JFrog<br/>(Tarball artifacts)"]
+    Playground["🧪 BCR Playground<br/>(source.json metadata)"]
+    Test["🧪 CI Tests<br/>Build backend-app"]
+    Decision{"✅ Tests passed?"}
 
-    %% Fluxo
-    Dev -->|git push| CI
-    CI -->|1. Upload tar.gz| JFrog
-    CI -->|2. Cria source.json| Playground
+    Promo{"🚀 Promotion"}
+    PR["👤 Option A (Manual)<br/>Open PR copying JSON<br/>Playground → Prod"]
+    Auto["🤖 Option B (Automatic)<br/>CI pushes to Prod repo"]
+    Prod["🔒 BCR Production<br/>(Official)"]
 
-    Playground -.->|3. Consome Versão| Consumer
-    Consumer -->|4. Roda Testes| Decision
+    %% Main flow
+    Dev -->|git commit| CI
+    CI -->|Generate tarball| JFrog
+    CI -->|Register metadata| Playground
 
-    Decision -- Não --> Fix
-    Fix --> Dev
+    %% Test flow
+    Playground -->|Consume version| Test
+    Test --> Decision
 
-    Decision -- Sim -->|5. Promoção (Copy JSON)| Prod
+    %% Decision
+    Decision -- No -->|"❌ Fix issues"| Dev
+    Decision -- Yes --> Promo
+
+    %% Promotion paths
+    Promo --> PR
+    Promo --> Auto
+
+    PR -->|Human approval| Prod
+    Auto -->|Automatic push| Prod
 
 
 ```
