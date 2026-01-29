@@ -104,7 +104,7 @@ flowchart TD
     %% Fase 2: Verificação
     subgraph Stage_Test [Fase 2: Validação]
         direction TB
-        BCR_Play -.->|Fetch Metadata| Consumer_CI[⚙️ Consumer App CI\n(backend-app)]
+        BCR_Play -.->|Fetch Metadata| Consumer_CI["⚙️ Consumer App CI\n(backend-app)"]
         JFrog -.->|Download Binary| Consumer_CI
         Consumer_CI -->|Bazel Test| Check{✅ Testes Passaram?}
     end
@@ -115,7 +115,7 @@ flowchart TD
         Check -- Não --> Fix[❌ Corrigir Bug]
         Check -- Sim --> Promo{Escolha de Promoção}
         
-        Promo -->|Opção A: Manual| PR[📝 Abrir Pull Request\n(Playground -> Prod)]
+        Promo -->|Opção A: Manual| PR["📝 Abrir Pull Request\n(Playground -> Prod)"]
         PR -->|Code Review + Merge| BCR_Prod
         
         Promo -->|Opção B: Automática| Bot[🤖 CI Bot Push]
@@ -131,15 +131,6 @@ flowchart TD
     class JFrog storage;
     class BCR_Play,BCR_Prod registry;
     class Check,Promo decision;
-
-**Goal:** Promote a verified Release Candidate to Stable.
-
-Once `1.0.0-rc1` is verified by the Consumer CI:
-
-1. **Copy Metadata:** Copy the folder `infrastructure/bcr-playground/modules/corp_math/1.0.0-rc1` to `infrastructure/bcr-prod/...`.
-2. **Update Index:** Add the version to `metadata.json` in Production.
-3. **Stability:** The artifact in `jfrog-storage` **does not change**. This ensures the SHA256 verified in CI is exactly what Production uses.
-
 ---
 
 ## 4. Maintenance & Validations
