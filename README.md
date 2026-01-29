@@ -108,6 +108,8 @@ graph TD
     
     Decision -- Não --> Fix["❌ Corrigir Bug"]
     Decision -- Sim -->|5. Promoção (Copy JSON)| Prod
+```
+
 ---
 
 ## 4. Maintenance & Validations
