@@ -87,6 +87,7 @@ bazel --bazelrc=ci.bazelrc run //:server
 
 ### C. The Promotion Workflow (Playground -> Prod)
 
+```mermaid
 flowchart TD
     %% Atores e Início
     Dev([👷 Desenvolvedor]) -->|git push| CI_Start(🚀 Início do CI Pipeline)
