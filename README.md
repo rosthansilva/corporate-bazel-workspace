@@ -9,8 +9,8 @@ This project simulates a corporate environment for managing internal C++ depende
 * **Source of Truth:** Git repositories (`repos/`).
 * **Artifact Storage:** JFrog Artifactory Mock (`infrastructure/jfrog-storage`).
 * **Registries:**
-* **Playground:** For CI/CD, unstable builds, and Release Candidates (RC).
-* **Production:** For stable, approved releases used by all developers.
+  - **Playground:** For CI/CD, unstable builds, and Release Candidates (RC).
+  - **Production:** For stable, approved releases used by all developers.
 
 
 
