@@ -1,0 +1,4 @@
+# .bazelrc (PROD - Default)
+# Por padrão, devs só veem o que está no registry de Produção + Google
+common --registry=file://%workspace%/../../infrastructure/bcr-prod
+common --registry=https://bcr.bazel.build

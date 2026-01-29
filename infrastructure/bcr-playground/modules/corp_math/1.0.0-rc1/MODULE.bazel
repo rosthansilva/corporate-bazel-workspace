@@ -1,0 +1,5 @@
+module(
+    name = "corp_math",
+    version = "1.0.0-rc1", # O CI vai injetar a versão real
+    compatibility_level = 1,
+)

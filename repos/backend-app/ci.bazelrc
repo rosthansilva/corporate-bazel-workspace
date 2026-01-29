@@ -1,0 +1,4 @@
+# ci.bazelrc (MIGRATION/TESTING)
+# O CI injeta o Playground ANTES do Prod
+common --registry=file://%workspace%/../../infrastructure/bcr-playground
+import %workspace%/.bazelrc

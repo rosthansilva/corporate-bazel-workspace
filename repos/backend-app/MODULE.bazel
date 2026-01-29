@@ -1,0 +1,14 @@
+module(
+    name = "backend", 
+    version = "1.0"
+    )
+
+bazel_dep(
+    name = "corp_math", 
+    version = "1.0.0-rc1"
+    )
+
+# local_path_override(
+#     module_name = "corp_math",
+#     path = "../platform-math-lib",
+# )
