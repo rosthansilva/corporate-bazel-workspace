@@ -89,17 +89,29 @@ bazel --bazelrc=ci.bazelrc run //:server
 
 ```mermaid
 graph TD
-    A[Dev Push] --> B[CI Pipeline]
-    
-    B -->|1. Upload Binary| C[JFrog Storage]
-    B -->|2. Register Version| D[BCR Playground]
-    
-    D -->|3. Fetch & Test| E[Consumer App]
-    
-    E --> F{Tests Passed?}
-    
-    F -- Yes --> G[BCR Production]
-    F -- No --> A
+    %% Nós (Nodes)
+    Dev["👷 Developer"]
+    CI["🚀 CI Pipeline"]
+    JFrog["☁️ JFrog (Binários)"]
+    Playground["🧪 BCR Playground (Metadados)"]
+    Consumer["⚙️ Backend App (Validação)"]
+    Decision{"✅ Aprovado?"}
+    Fix["❌ Corrigir Bug"]
+    Prod["🔒 BCR Production (Oficial)"]
+
+    %% Fluxo
+    Dev -->|git push| CI
+    CI -->|1. Upload tar.gz| JFrog
+    CI -->|2. Cria source.json| Playground
+
+    Playground -.->|3. Consome Versão| Consumer
+    Consumer -->|4. Roda Testes| Decision
+
+    Decision -- Não --> Fix
+    Fix --> Dev
+
+    Decision -- Sim -->|5. Promoção (Copy JSON)| Prod
+
 
 ```
 
