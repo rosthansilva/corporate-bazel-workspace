@@ -12,8 +12,6 @@ This project simulates a corporate environment for managing internal C++ depende
   - **Playground:** For CI/CD, unstable builds, and Release Candidates (RC).
   - **Production:** For stable, approved releases used by all developers.
 
-
-
 ---
 
 ## 2. Directory Structure
@@ -166,6 +164,8 @@ python3 health_check.py --registry infrastructure/bcr-prod
 
 ```
 
+!(Test Image)[img/SCR-20260129-cbua.png]
+
 ---
 
 ## 5. Configuration Reference
@@ -195,3 +195,5 @@ common --registry=file://%workspace%/../../infrastructure/bcr-playground
 import %workspace%/.bazelrc
 
 ```
+
+## 6 
