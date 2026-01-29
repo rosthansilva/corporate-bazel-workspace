@@ -89,16 +89,17 @@ bazel --bazelrc=ci.bazelrc run //:server
 
 ```mermaid
 graph TD
-    Dev[Dev Push] --> CI[CI Pipeline]
-    CI -->|1. Upload Tarball| JFrog[JFrog Artifactory]
-    CI -->|2. Create Metadata| Play[BCR Playground]
+    A[Dev Push] --> B[CI Pipeline]
     
-    Play -->|3. Validate| App[Consumer App Test]
+    B -->|1. Upload Binary| C[JFrog Storage]
+    B -->|2. Register Version| D[BCR Playground]
     
-    App --> Check{Success?}
+    D -->|3. Fetch & Test| E[Consumer App]
     
-    Check -- Yes --> Prod[BCR Production]
-    Check -- No --> Fix[Fix Bug]
+    E --> F{Tests Passed?}
+    
+    F -- Yes --> G[BCR Production]
+    F -- No --> A
 
 ```
 
