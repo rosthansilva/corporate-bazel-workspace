@@ -164,7 +164,7 @@ python3 health_check.py --registry infrastructure/bcr-prod
 
 ```
 
-!(Test Image)[img/SCR-20260129-cbua.png]
+!(Test Image)[./img/SCR-20260129-cbua.png]
 
 ---
 
