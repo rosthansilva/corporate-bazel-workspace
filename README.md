@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-This project simulates a corporate environment for managing internal C++ dependencies using **Bazel (Bzlmod)**. It demonstrates how to decouple source code from artifact storage and how to manage dependency lifecycles using segregated registries (**Playground** vs. **Production**).
+This project simulates a corporate environment managing internal C++ dependencies using **Bazel (Bzlmod)** for study propose. It demonstrates how to decouple source code from artifact storage and how to manage dependency lifecycles using segregated registries (**Playground** vs. **Production**) with bazelmod.
 
 ### Key Components
 
